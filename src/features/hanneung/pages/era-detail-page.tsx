@@ -1,7 +1,9 @@
 import { Link, useParams } from 'react-router';
-import { Bookmark, Check } from 'lucide-react';
+import { Bookmark, Check, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ERAS } from '../data/eras';
+import { RULERS } from '../data/rulers';
+import { RulerTable } from '../components/ruler-table';
 import { eraProgress, getEra } from '../lib/selectors';
 import { cardClass, cardHoverClass } from '../lib/styles';
 import { useStudy } from '../store/study-context';
@@ -20,6 +22,7 @@ export function EraDetailPage() {
   const prev = ERAS[idx - 1];
   const next = ERAS[idx + 1];
   const p = eraProgress(era, completedSet);
+  const rulers = RULERS[era.id];
 
   return (
     <div className="flex flex-col gap-8">
@@ -33,6 +36,20 @@ export function EraDetailPage() {
           </span>
         </div>
       </PageHeader>
+
+      {rulers && rulers.length > 0 && (
+        <details className="group flex flex-col gap-3" open>
+          <summary className="cursor-pointer list-none font-semibold [&::-webkit-details-marker]:hidden">
+            <span className="inline-flex items-center gap-1.5">
+              <ChevronRight className="size-4 transition-transform group-open:rotate-90" aria-hidden="true" />
+              왕·정부 재위 연표 <span className="text-sm font-normal text-muted-foreground">({rulers.length})</span>
+            </span>
+          </summary>
+          <div className="mt-3">
+            <RulerTable rulers={rulers} />
+          </div>
+        </details>
+      )}
 
       <ul className="flex flex-col gap-3">
         {era.topics.map((t) => {
@@ -64,6 +81,8 @@ export function EraDetailPage() {
                   <ImportanceBadge level={t.importance} />
                   <span>
                     핵심 {t.points.length} · 연표 {t.events.length} · 키워드 {t.terms.length}
+                    {t.traps?.length ? ` · 함정 ${t.traps.length}` : ''}
+                    {t.tables?.length ? ` · 비교표 ${t.tables.length}` : ''}
                   </span>
                   {done && <span className="font-medium text-emerald-700 dark:text-emerald-400">학습 완료</span>}
                 </div>
