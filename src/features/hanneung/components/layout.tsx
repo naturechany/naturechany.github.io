@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
-import { BookOpen, History, House, Search, User } from 'lucide-react';
+import { BookOpen, History, House, PencilLine, Search, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const NAV = [
   { to: '/', label: '홈', icon: House, end: true },
   { to: '/eras', label: '시대별 학습', icon: History, end: false },
+  { to: '/practice', label: '기출 연습', icon: PencilLine, end: false },
   { to: '/keywords', label: '키워드 사전', icon: Search, end: false },
   { to: '/my', label: '내 학습', icon: User, end: false },
 ] as const;
@@ -54,7 +55,7 @@ export function Layout() {
       {/* 모바일 하단 탭바 */}
       <nav
         aria-label="주 메뉴"
-        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-4 border-t bg-background pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-5 border-t bg-background pb-[env(safe-area-inset-bottom)] md:hidden"
       >
         {NAV.map(({ to, label, icon: Icon, end }) => (
           <NavLink

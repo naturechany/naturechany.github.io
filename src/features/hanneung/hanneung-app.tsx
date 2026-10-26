@@ -8,6 +8,8 @@ import { EraDetailPage } from './pages/era-detail-page';
 import { TopicPage } from './pages/topic-page';
 import { KeywordsPage } from './pages/keywords-page';
 import { MyPage } from './pages/my-page';
+import { PracticePage } from './pages/practice-page';
+import { QuizPage } from './pages/quiz-page';
 import { NotFoundPage } from './pages/not-found-page';
 
 // GitHub Pages는 SPA rewrite가 없으므로 HashRouter로 딥링크/새로고침 404 회피
@@ -22,6 +24,8 @@ export function HanneungApp() {
             <Route path="eras/:eraId" element={<EraDetailPage />} />
             <Route path="topics/:topicId" element={<TopicPage />} />
             <Route path="keywords" element={<KeywordsPage />} />
+            <Route path="practice" element={<PracticePage />} />
+            <Route path="practice/:setId" element={<QuizPage />} />
             <Route path="my" element={<MyPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>

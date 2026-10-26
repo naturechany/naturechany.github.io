@@ -11,6 +11,8 @@ const INITIAL: StudyState = {
   targetGrade: 1,
   examDate: null,
   lastTopicId: null,
+  examRecords: {},
+  wrongNotes: [],
 };
 
 const toggle = (list: string[], id: string) =>
@@ -26,6 +28,18 @@ function reducer(state: StudyState, action: StudyAction): StudyState {
       return state.lastTopicId === action.id ? state : { ...state, lastTopicId: action.id };
     case 'setExam':
       return { ...state, examLevel: action.level, targetGrade: action.grade, examDate: action.date };
+    case 'saveExamRecord': {
+      const prev = state.examRecords[action.examId];
+      const bestScore = Math.max(prev?.bestScore ?? 0, action.record.score);
+      return { ...state, examRecords: { ...state.examRecords, [action.examId]: { ...action.record, bestScore } } };
+    }
+    case 'syncWrongNotes': {
+      const right = new Set(action.right);
+      const kept = state.wrongNotes.filter((k) => !right.has(k));
+      return { ...state, wrongNotes: [...kept, ...action.wrong.filter((k) => !kept.includes(k))] };
+    }
+    case 'removeWrongNote':
+      return { ...state, wrongNotes: state.wrongNotes.filter((k) => k !== action.key) };
     case 'reset':
       return INITIAL;
   }

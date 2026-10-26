@@ -84,4 +84,52 @@ export interface StudyState {
   targetGrade: number;
   examDate: string | null; // yyyy-mm-dd
   lastTopicId: string | null;
+  /** 모의고사 id → 최근 응시 기록 */
+  examRecords: Record<string, ExamRecord>;
+  /** 오답 노트: `${examId}:${no}` */
+  wrongNotes: string[];
+}
+export type ChoiceNo = 1 | 2 | 3 | 4 | 5;
+
+/** 기출 변형 문항. 실제 시험처럼 1·2·3점 배점, 한 회차 합계 100점 */
+export interface ExamQuestion {
+  no: number;
+  points: 1 | 2 | 3;
+  /** 연결 단원 — 해설에서 개념 학습으로 이동 */
+  topicId?: string;
+  prompt: string;
+  /** 제시 자료(사료·대화·연표 등). 한 줄이 한 문단 */
+  source?: string[];
+  choices: [string, string, string, string, string];
+  answer: ChoiceNo;
+  explanation: string;
+}
+
+/** 문항 자료 사진 (public/exams/) */
+export interface ExamImage {
+  /** 확장자 없는 파일명 — .avif와 .webp가 함께 있다 */
+  file: string;
+  width: number;
+  height: number;
+  alt: string;
+  /** 저작자 · 라이선스 */
+  credit: string;
+  /** 원본 출처 페이지 */
+  href: string;
+}
+
+export interface MockExam {
+  id: string;
+  /** 출제 경향을 따온 실제 회차 */
+  round: number;
+  heldOn: string; // yyyy-mm-dd
+  questions: ExamQuestion[];
+}
+
+export interface ExamRecord {
+  score: number;
+  bestScore: number;
+  correct: number;
+  total: number;
+  takenAt: string; // ISO
 }
